@@ -6,8 +6,13 @@ from rag_utils import load_and_index_docs, get_top_k_context
 
 load_dotenv()
 TOGETHER_API_KEY = os.getenv("TOGETHER_API_KEY")
-print("📚 Indexing docs...")
+print("Indexing docs...")
+# ***Remove This Once Detection Logic is Complete in run_with_mode***
 chunks, index, embeddings = load_and_index_docs()
+
+# This is to load Both DOCS. 
+chunks_gradio, index_gradio, emb_gradio = load_and_index_docs("data/gradio_docs.md")
+chunks_rust, index_rust, emb_rust = load_and_index_docs("data/rust_docs.md")
 
 # Call the Model to get a response.
 def ask_llm(prompt):
@@ -37,7 +42,7 @@ def ask_llm(prompt):
 
 # Image classifier **** WORK ON AND TEST MORE ***
 def predict_image(img):
-    return "This would be classified here — add a model to go deeper!"
+    return "This would be classified here"
 
 # Gradio UI
 with gr.Blocks(theme="soft") as demo:
@@ -49,10 +54,18 @@ with gr.Blocks(theme="soft") as demo:
 
     user_input = gr.Textbox(label="Prompt", placeholder="Ask about Gradio...", lines=2)
     output = gr.Code(label="Response")
-
+    # ------------------------------------------
+    #ADD MORE LANGUAGES/CHUNCKS HERE, 
+    #Use this as a study guide to improve my own understanding of different languages?
     def run_with_mode(user_query, selected_mode):
         prefix = "Generate Gradio code for: " if selected_mode == "Generate Code" else "Explain this Gradio code: "
-        context_chunks = get_top_k_context(user_query, chunks, index, embeddings)
+
+        prompt_lower = user_query.lower()
+        if "rust" in prompt_lower:
+            context_chunks = get_top_k_context(user_query, chunks_rust, index_rust, emb_rust)
+        else:
+             context_chunks = get_top_k_context(user_query, chunks_gradio, index_gradio, emb_gradio)
+
         context = "\n\n".join(context_chunks)
         full_prompt = f"""Use the following context to answer:
 {context}
@@ -73,5 +86,5 @@ with gr.Blocks(theme="soft") as demo:
         image_btn = gr.Button("Classify Image")
         image_btn.click(fn=predict_image, inputs=image_input, outputs=label_output)
 
-print("✅ App is starting...")
+print("App is starting...")
 demo.launch()
