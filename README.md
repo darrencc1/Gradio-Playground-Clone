@@ -1,6 +1,6 @@
 # Gradio Playground Clone
 
-A powerful AI assistant that helps you **generate or explain Gradio code** using an LLM (Mistral-7B) and **RAG (Retrieval-Augmented Generation)** over real documentation.
+A powerful AI assistant that helps you **generate or explain Gradio code** using an LLM (Mistral-7B) and **RAG (Retrieval-Augmented Generation)** over real documentation. This is also an exploration of Gradio and RAG for personal learning for myself. 
 
 Built with:
 -  Together.ai API (Mistral-7B-Instruct)

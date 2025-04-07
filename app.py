@@ -76,15 +76,16 @@ with gr.Blocks(theme="soft") as demo:
 
     btn = gr.Button("Run")
     btn.click(fn=run_with_mode, inputs=[user_input, mode], outputs=output)
-
-    gr.Markdown("---")
-    gr.Markdown("Powered by Mistral on [Together.ai](https://together.ai) — built by [Darren Chambers](https://github.com/darrencc1)")
-
     with gr.Accordion("Image Classifier Demo", open=False):
         image_input = gr.Image(type="filepath")
         label_output = gr.Textbox(label="Label")
         image_btn = gr.Button("Classify Image")
         image_btn.click(fn=predict_image, inputs=image_input, outputs=label_output)
 
+
+    gr.Markdown("---")
+    gr.Markdown("Powered by Mistral on [Together.ai](https://together.ai) — built by [Darren Chambers](https://github.com/darrencc1)")
+
+    
 print("App is starting...")
 demo.launch()
